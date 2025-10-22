@@ -1,4 +1,7 @@
 [core]
     remote = remote
+    autostage = true
 ['remote "remote"']
     url = ../TEMP
+['remote "tmp"']
+    url = C:\Users\sohan\Assignment\creditcard\TEMP

@@ -1,63 +1,65 @@
 schema: '2.0'
 stages:
   make_dataset:
-    cmd: python .\src\data\make_dataset.py .\data\raw\creditcard.csv
+    cmd: python .\src\data\make_dataset.py .\data\raw\creditcard.csv 
+      .\data\processed\creditcard.csv
     deps:
     - path: .\data\raw\creditcard.csv
       hash: md5
-      md5: e8ffcd27762aaf279e268eb849a060f9
-      size: 150825054
+      md5: e90efcb83d69faf99fcab8b0255024de
+      size: 150828752
     - path: .\src\data\make_dataset.py
       hash: md5
-      md5: 5d87ea0853101b748b17af0be510c2ac
-      size: 1314
+      md5: d1575af62e5ae419509dcf0cb997a3b5
+      size: 3598
     params:
       params.yaml:
-        make_dataset.seed: 2023
-        make_dataset.test_split: 0.2
+        make_dataset.seed: 42
+        make_dataset.test_split: 0.3
     outs:
     - path: .\data\processed\
       hash: md5
-      md5: b21101ae3f5090f5af39e6f9cbdb21c3.dir
-      size: 151098829
+      md5: 58ed805b089b73109e57de0cbed4eebb.dir
+      size: 151102527
       nfiles: 2
   train_model:
     cmd: python .\src\models\train_model.py .\data\processed\
     deps:
     - path: .\data\processed\
       hash: md5
-      md5: b21101ae3f5090f5af39e6f9cbdb21c3.dir
-      size: 151098829
+      md5: 58ed805b089b73109e57de0cbed4eebb.dir
+      size: 151102527
       nfiles: 2
     - path: .\src\models\train_model.py
       hash: md5
-      md5: 5af92edffd22804f29af18c1efe94bbb
-      size: 1362
+      md5: 32c755d01b2a925279f004ba0c16bf92
+      size: 5783
     outs:
     - path: .\models\
       hash: md5
-      md5: 6191af90def2b514e1128c7d91ae5877.dir
-      size: 397817
+      md5: f7250e12771ca09f02b5ee6dfc572390.dir
+      size: 527273
       nfiles: 1
   visualize:
-    cmd: python .\src\visualization\visualize.py .\models\model.joblib .\data\processed\
+    cmd: python .\src\visualization\visualize.py .\models\model.joblib 
+      .\data\processed\
     deps:
     - path: .\data\processed\
       hash: md5
-      md5: 45207c27b5aec2846e4532f5bee1631f.dir
-      size: 151098829
+      md5: 58ed805b089b73109e57de0cbed4eebb.dir
+      size: 151102527
       nfiles: 2
     - path: .\models\model.joblib
       hash: md5
-      md5: e01830bd03da0f4f328c34580d40d5b3
-      size: 3865
+      md5: b71f25412838c201d7e6d46aa34f97e4
+      size: 527273
     - path: .\src\visualization\visualize.py
       hash: md5
-      md5: db86d2e43c664f095353e9ba6afe3393
-      size: 3687
+      md5: a91ca79bfaea995c333fa50841f86fde
+      size: 3683
     outs:
     - path: dvclive
       hash: md5
-      md5: e887b02afa678d483c083f4d3632dc94.dir
-      size: 18530385
+      md5: 9d75c0bef2615efbd5fd1d8cf519a39a.dir
+      size: 23250082
       nfiles: 8
