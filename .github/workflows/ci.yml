@@ -110,7 +110,7 @@ jobs:
       
       - name: Delete Previous Container
         run: |
-          docker rm -f credit_card || true
+          docker rm -f credicard || true
 
       # - name: Run Docker Image to serve users
       #   run: |
