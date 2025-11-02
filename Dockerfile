@@ -8,6 +8,8 @@ WORKDIR /app
 COPY app.py /app/app.py
 COPY model.joblib /app/model.joblib
 COPY requirements.txt /app/requirements.txt
+COPY app_streamlit.py /app/app_streamlit.py
+
 
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
@@ -18,4 +20,11 @@ RUN pip install -r requirements.txt
 
 
 # Run app.py when the container launches
-CMD ["python", "app.py"]
+#CMD ["python", "app.py"]
+
+
+#EXPOSE 8000 8501
+
+# Start both FastAPI and Streamlit
+CMD ["bash", "-c", "uvicorn app.py:app --host 0.0.0.0 --port 8080 & streamlit run app_streamlit.py --server.port=8501 --server.address=0.0.0.0"]
+
