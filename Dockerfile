@@ -23,7 +23,8 @@ RUN pip install -r requirements.txt
 #CMD ["python", "app.py"]
 
 
-#EXPOSE 8000 8501
+EXPOSE 8000 
+EXPOSE 8501
 
 # Start both FastAPI and Streamlit
 CMD ["bash", "-c", "uvicorn app:app --host 0.0.0.0 --port 8080 & streamlit run app_streamlit.py --server.port=8501 --server.address=0.0.0.0"]
