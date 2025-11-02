@@ -12,3 +12,4 @@ uvicorn
 sagemaker
 ipykernel
 boto3
+streamlit
