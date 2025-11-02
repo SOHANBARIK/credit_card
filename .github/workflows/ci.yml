@@ -85,9 +85,37 @@ jobs:
 
       
   
+  # Continuous-Deployment:
+  #   runs-on: self-hosted
+  #   needs: build-and-push-ecr-image
+  #   steps:
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ${{ secrets.AWS_REGION }}
+
+  #     - name: Login to Amazon ECR
+  #       id: login-ecr
+  #       uses: aws-actions/amazon-ecr-login@v2
+      
+  #     - name: Pull latest images
+  #       env:
+  #         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+  #         ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
+  #         IMAGE_TAG: latest
+  #       #working-directory: ${{ github.workspace }}
+  #       run: |
+  #         docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+  #       # docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+##yaha se
   Continuous-Deployment:
     runs-on: self-hosted
     needs: build-and-push-ecr-image
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -95,20 +123,19 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-
+  
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
-      
+  
       - name: Pull latest images
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
           IMAGE_TAG: latest
-        working-directory: ${{ github.workspace }}
         run: |
           docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        # docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+# yaha tak copy paste kiya tha
       
       - name: Delete Previous Container$
         run: |
