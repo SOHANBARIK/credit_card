@@ -2,6 +2,9 @@
 from fastapi import FastAPI
 from joblib import load
 from pydantic import BaseModel
+import pathlib
+import sys
+from typing import Optional
 
 app = FastAPI()
 
@@ -40,8 +43,22 @@ class PredictionInput(BaseModel):
 
 
 # Load the pre-trained RandomForest model
-model_path = "models/model.joblib"
+# model_path = ".\models\model.joblib"
+# model = load(model_path)
+
+# Attempt to load model but don't crash app if missing or incompatible
+# model_path = pathlib.Path(".creditcard/models/model.joblib") #/ "model.joblib"
+# model= load(model_path)
+model_path = "./models/model.joblib"
 model = load(model_path)
+# model: Optional[object] = None
+# try:
+#     if not model_path.exists():
+#         raise FileNotFoundError(f"Model file not found at {model_path}")
+#     model = load(model_path)
+# except Exception as e:
+#     print(f"Warning: failed to load model: {e}", file=sys.stderr)
+#     model = None
 
 @app.get("/")
 def home():

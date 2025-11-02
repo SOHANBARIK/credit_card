@@ -1,5 +1,5 @@
 # main.py
-from fastapi import FastAPI
+from fastapi import FastAPI,HTTPException
 from joblib import load
 from pydantic import BaseModel
 
@@ -39,8 +39,9 @@ class PredictionInput(BaseModel):
     Amount: float
 
 
+
 # Load the pre-trained RandomForest model
-model_path = "model.joblib"
+model_path = "models/model.joblib"
 model = load(model_path)
 
 @app.get("/")
@@ -49,6 +50,7 @@ def home():
 
 @app.post("/predict")
 def predict(input_data: PredictionInput):
+    # try:
     # Extract features from input_data and make predictions using the loaded model
     features = [input_data.Time,
                 input_data.V1,
@@ -84,7 +86,9 @@ def predict(input_data: PredictionInput):
     prediction = model.predict([features])[0].item()
     # Return the prediction
     return {"prediction": prediction}
+    # except Exception as e:
+    #     raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    uvicorn.run(app, host="127.0.0.1", port=8080)

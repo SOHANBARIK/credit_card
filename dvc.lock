@@ -55,8 +55,8 @@ stages:
       size: 527273
     - path: .\src\visualization\visualize.py
       hash: md5
-      md5: a91ca79bfaea995c333fa50841f86fde
-      size: 3683
+      md5: 71ca8ada206320a0091912841f46d300
+      size: 3736
     outs:
     - path: dvclive
       hash: md5
