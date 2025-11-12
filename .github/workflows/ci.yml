@@ -254,7 +254,7 @@ jobs:
       - name: Stop and remove old container
         run: |
           echo "Stopping old container if running..."
-          docker rm -f credit_app || true
+          docker rm -f creditcard || true
 
       - name: Run combined FastAPI + Streamlit container
         env:
@@ -267,7 +267,7 @@ jobs:
             -p 8080:8080 \
             -p 8501:8501 \
             --ipc="host" \
-            --name=credit_app \
+            --name=creditcard \
             -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
             -e AWS_REGION=${{ secrets.AWS_REGION }} \
