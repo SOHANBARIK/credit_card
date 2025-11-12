@@ -1,3 +1,4 @@
+
 name: CI Pipeline
 
 on:
@@ -69,18 +70,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # --- TEMP DEBUG: inspect runner user and docker socket (remove after verifying) ---
-      - name: Debug Docker socket & runner user
-        run: |
-          echo "USER: $(whoami)"
-          echo "ID:"
-          id
-          echo "Docker socket:"
-          ls -l /var/run/docker.sock || true
-          echo "Try docker version (sudo then non-sudo):"
-          sudo docker --version || true
-          docker --version || true
-
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
@@ -90,15 +79,14 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
           IMAGE_TAG: latest
-        # Use sudo for docker commands on the self-hosted runner to avoid permission denied
         run: |
           echo "Pulling image from ECR..."
-          sudo docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Stop and remove old container
         run: |
           echo "Stopping old container if running..."
-          sudo docker rm -f creditcard || true
+          docker rm -f creditcard || true
 
       - name: Run combined FastAPI + Streamlit container
         env:
@@ -107,7 +95,7 @@ jobs:
           IMAGE_TAG: latest
         run: |
           echo "Running new container exposing both ports (FastAPI + Streamlit)"
-          sudo docker run -d \
+          docker run -d \
             -p 8080:8080 \
             -p 8501:8501 \
             --ipc="host" \
@@ -118,4 +106,4 @@ jobs:
             $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
           echo "Container running successfully!"
-          sudo docker ps
+          docker ps
